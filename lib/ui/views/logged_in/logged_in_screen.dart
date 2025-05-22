@@ -27,6 +27,7 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      Provider.of<PageViewModel>(context, listen: false).configureFab(index);
     });
   }
 
@@ -43,7 +44,6 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final pageViewModel = Provider.of<PageViewModel>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -58,12 +58,14 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
       ),
       backgroundColor: theme.colorScheme.surface,
       floatingActionButton: Consumer<PageViewModel>(
-        builder: (context, fabViewModel, child) {
-          return FloatingActionButton.extended(
+        builder: (context, pageViewModel, child) {
+          return pageViewModel.showFab 
+          ? FloatingActionButton.extended(
             onPressed: pageViewModel.fabAction, 
             label: pageViewModel.fabLabel,
-            icon: pageViewModel.fabIcon,
-          );
+            icon: pageViewModel.fabIcon,  
+          )
+          : SizedBox();
         }
         ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
