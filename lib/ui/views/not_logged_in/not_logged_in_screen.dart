@@ -59,6 +59,8 @@ class _NotLoggedInScreenState extends State<NotLoggedInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -82,6 +84,7 @@ class _NotLoggedInScreenState extends State<NotLoggedInScreen> {
             )
           )
         ),
+        backgroundColor: theme.colorScheme.surface,
       );
   }
 }

@@ -60,60 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final boardViewModel = Provider.of<BoardViewModel>(context);
     
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: theme.colorScheme.surface,
-        title: SearchBarWidget(
-          controller: _searchControllerInHome, 
-          hintText: '게시글 검색...', 
-          onSubmitted: _performHomeSearch,
-          focusNode: _searchFocusNodeInHome,
-          onClear: () {
-            // 검색어 클리어 시의 추가 동작 구현할 것.
-          },), 
-        actions: _isSearchBarWidgetActivated
-        ? ([
-          IconButton(
-            icon: Icon(Icons.close, color: theme.colorScheme.primary),
-            onPressed: _toggleSearchBarWidgetActivated,
-            ),
-          ])
-        : [
-          IconButton(
-            icon: Icon(Icons.filter_list, color: theme.colorScheme.primary,),
-            onPressed: () async {
-              showDialog(
-                context: context, 
-                barrierDismissible: true,
-                barrierColor: Colors.black.withValues(alpha: 0.5),
-                builder: (context) => FilterMenuOverlay(
-                  onApply: (a, b, c) {},
-                  onCancel: () {},
-                ),
-              );
-            },
-            tooltip: '필터',
-          ),
-          IconButton(
-            icon: Icon(Icons.notifications_none, color: theme.colorScheme.primary),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 400),
-                      child: NotificationsTabScreen()
-                    ),
-                  ),),
-              );
-            },
-            tooltip: '알림',
-          ),
-        ],
-        automaticallyImplyLeading: !_isSearchBarWidgetActivated,
-      ),
-      body: Stack( // 메뉴 오버레이를 위해 Stack 사용
-        children: [
+    return Stack( // 메뉴 오버레이를 위해 Stack 사용
+    children: [
           GestureDetector( // 화면 다른 곳 탭 시 검색창 포커스 해제 (선택적)
           onTap: () {
             if (_isSearchBarWidgetActivated) {
@@ -133,18 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){},
-        icon: Icon(Icons.post_add_outlined, size: 24),
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Text(widget.lostCategory == 'lost' ? '잃어버렸어요' : '주웠어요',),
-        ),
-        tooltip: '글쓰기',
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
-    );
+      );
   }
 }
 

@@ -66,8 +66,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {   
     final theme = Theme.of(context);
-    final styleForHint = theme.textTheme.bodyLarge;
+    final styleForHint = theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500, color: const Color.fromARGB(255, 158, 158, 158));
     final styleForLabel = theme.textTheme.labelLarge;
+    const divider = SizedBox(height: 48,);
+
+    final focusedBorder = UnderlineInputBorder(
+      borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
+    );
+
+    final notFocusedBorder = UnderlineInputBorder(
+      borderSide: BorderSide(color: theme.hintColor, width: 2.0)
+    );
 
     return Form(
       key: _formKey,
@@ -81,10 +90,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   '회원가입',
-                  style: theme.textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w900),
+                  style: theme.textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w900),
                 )
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 30,),
               Align(
               alignment: Alignment.topLeft,
               child: RichText(
@@ -92,31 +101,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     TextSpan(
                       text: '아직 계정이 없으신가요?\n',
-                      style: theme.textTheme.bodyMedium,
+                      style: theme.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.w500),
                     ),
                     TextSpan(
                       text: '회원가입',
                       recognizer: TapGestureRecognizer()..onTap = widget.onSwitchToLogin,
-                      style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.secondary),
+                      style: theme.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.w500, color: theme.colorScheme.primary),
                     )
                   ]
                 ),
                 ),
             ),
-            SizedBox(height: 40,),
-            Text(
-              'Email',
-              style: styleForLabel,
+            divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Email',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),                        
                 TextFormField(
                   controller: widget.emailController,
                   obscureText: false,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Icon(Icons.email_outlined),
+                    ),
+                    prefixIconColor: theme.colorScheme.primary,
                     hintText: 'example@ajou.ac.kr',
                     hintStyle: styleForHint,
-                    border: OutlineInputBorder(),
+                    focusedBorder: focusedBorder,
+                    border: notFocusedBorder,
                     ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -130,21 +147,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-                  SizedBox(height: 24),
-                  Text(
-                    'Name',
-                    style: styleForLabel,
+                  divider,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      'Name',
+                      style: styleForLabel,
+                    ),
                   ),
             SizedBox(height: 6),            
                   TextFormField(
                     controller: widget.nameController,
                     obscureText: false,
                     decoration: InputDecoration(
-                      //labelText: '이름',
-                      prefixIcon: Icon(Icons.account_box_outlined, color: theme.primaryColor,),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Icon(Icons.account_circle_outlined),
+                      ),
+                      prefixIconColor: theme.colorScheme.primary,
                       hintText: '홍길동',
                       hintStyle: styleForHint,
-                      border: OutlineInputBorder(),
+                      focusedBorder: focusedBorder,
+                      border: notFocusedBorder,
                     ),
                     keyboardType: TextInputType.name,
                     validator: (value) {
@@ -155,20 +179,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
-                    SizedBox(height: 24,),
-            Text(
-              'Nickname',
-              style: styleForLabel,
+                    divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Nickname',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
                     TextFormField(
                       controller: widget.nickNameController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        //labelText: '닉네임',
-                        prefixIcon: Icon(Icons.account_box_outlined, color: theme.primaryColor,),
-                        border: OutlineInputBorder(),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Icon(Icons.account_circle_outlined),
                         ),
+                        prefixIconColor: theme.colorScheme.primary,
+                        focusedBorder: focusedBorder,
+                        border: notFocusedBorder,
+                      ),
                       keyboardType: TextInputType.name,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -178,26 +209,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
-                      SizedBox(height: 24),
-            Text(
-              'Password',
-              style: styleForLabel,
+                      divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Password',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
                       TextFormField(
                         controller: widget.passwordController,
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
-                          //labelText: '비밀번호',
-                          prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor,),
-                          border: OutlineInputBorder(),
-                          suffix: IconButton(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Icon(Icons.lock_outline),
+                          ),
+                          prefixIconColor: theme.colorScheme.primary,
+                          focusedBorder: focusedBorder,
+                          border: notFocusedBorder,
+                          suffixIcon: IconButton(
                             onPressed: (){
                               setState(() {
                                 _obscurePassword = !_obscurePassword;
                               });
                             }, 
-                            icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined)),
+                            icon: Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Icon(_obscurePassword ? Icons.visibility_rounded : Icons.visibility_off_rounded, color: theme.hintColor),
+                            )
+                          ),
                           ),
                           validator: (value) {
                             if (value == null) {
@@ -207,25 +249,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           ),
-                          SizedBox(height: 24),
-            Text(
-              'Confirm Password',
-              style: styleForLabel,
+                          divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Confirm Password',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.confirmPasswordController,
                             obscureText: _obscureConfirmPassword,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor,),
-                              border: OutlineInputBorder(),
-                              suffix: IconButton(
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Icon(Icons.lock_outline),
+                              ),
+                              prefixIconColor: theme.colorScheme.primary,
+                              focusedBorder: focusedBorder,
+                              border: notFocusedBorder,
+                              suffixIcon: IconButton(
                                 onPressed: (){
                                   setState(() {
-                                    _obscureConfirmPassword = !_obscureConfirmPassword;
+                                      _obscureConfirmPassword = !_obscureConfirmPassword;
                                   });
                                 }, 
-                                icon: Icon(_obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined)),
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Icon(_obscureConfirmPassword ? Icons.visibility_rounded : Icons.visibility_off_rounded, color: theme.hintColor,),
+                                )
+                              ),
                               ),
                               validator: (value) {
                                 if (value == null || (widget.passwordController.text != value)) {
@@ -235,20 +289,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 },
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 ),
-                          SizedBox(height: 24,),
-            Text(
-              'Phone Number',
-              style: styleForLabel,
+                          divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Phone Number',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.phoneNumberController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.local_phone_outlined, color: theme.primaryColor,),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Icon(Icons.local_phone_outlined),
+                              ),
+                              prefixIconColor: theme.colorScheme.primary,
                               hintStyle: styleForHint,
                               hintText: '공란, 또는 01012345678',
-                              border: OutlineInputBorder(),
+                              focusedBorder: focusedBorder,
+                              border: notFocusedBorder,
                             ),
                             keyboardType: TextInputType.phone,
                             validator: (value) {
@@ -259,18 +321,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               },
                               autovalidateMode: AutovalidateMode.onUserInteraction,
                               ),
-                          SizedBox(height: 24),
-            Text(
-              'Description',
-              style: styleForLabel,
+                          divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Description',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.descriptionController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.text_fields_outlined, color: theme.primaryColor,),
-                              border: OutlineInputBorder(),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Icon(Icons.text_fields_outlined),
+                              ),
+                              prefixIconColor: theme.colorScheme.primary,
+                              focusedBorder: focusedBorder,
+                              border: notFocusedBorder,
                             ),
                             keyboardType: TextInputType.multiline,
                             maxLines: 3,

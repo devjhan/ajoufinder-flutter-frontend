@@ -1,8 +1,10 @@
 import 'package:ajoufinder/ui/navigations/bottom_nav_bar.dart';
+import 'package:ajoufinder/ui/viewmodels/page_view_model.dart';
 import 'package:ajoufinder/ui/views/account/account_screen.dart';
 import 'package:ajoufinder/ui/views/home/home_screen.dart';
 import 'package:ajoufinder/ui/views/map/map_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoggedInScreen extends StatefulWidget {
   const LoggedInScreen({super.key});
@@ -29,8 +31,20 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pageViewModel = Provider.of<PageViewModel>(context, listen: false);
+      pageViewModel.configureFab(_selectedIndex);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final pageViewModel = Provider.of<PageViewModel>(context);
+
     return Scaffold(
       body: SafeArea(
         child: IndexedStack(
@@ -42,6 +56,17 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+      backgroundColor: theme.colorScheme.surface,
+      floatingActionButton: Consumer<PageViewModel>(
+        builder: (context, fabViewModel, child) {
+          return FloatingActionButton.extended(
+            onPressed: pageViewModel.fabAction, 
+            label: pageViewModel.fabLabel,
+            icon: pageViewModel.fabIcon,
+          );
+        }
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

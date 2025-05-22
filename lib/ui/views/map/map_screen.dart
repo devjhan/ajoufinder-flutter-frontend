@@ -35,9 +35,8 @@ class _MapScreenState extends State<MapScreen> {
     }
 
       @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+      Widget build(BuildContext context) {
+        return Stack(
         children: [
           GoogleMap(
             initialCameraPosition: _initialPosition,
@@ -65,8 +64,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Set<Marker> _createMarkers() {

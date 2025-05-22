@@ -68,7 +68,7 @@ class _BoardCard extends StatelessWidget {
         },
         child: Card(
           elevation: 1, 
-          shadowColor: Colors.black.withValues(alpha: 0.06), // 연한 그림자
+          shadowColor: theme.colorScheme.shadow,
           surfaceTintColor: Colors.transparent,
           color: cardBg,
           shape: RoundedRectangleBorder(

@@ -32,12 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final styleForHint = theme.textTheme.bodyLarge;
+    final styleForHint = theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500, color: const Color.fromARGB(255, 158, 158, 158));
     final styleForLabel = theme.textTheme.labelLarge;
+    const divider = SizedBox(height: 48,);
 
-    return 
-    Form(key:_formKey,
-      child: SingleChildScrollView(
+    final focusedBorder = UnderlineInputBorder(
+      borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
+    );
+
+    final notFocusedBorder = UnderlineInputBorder(
+      borderSide: BorderSide(color: theme.hintColor, width: 2.0)
+    );
+
+    return Form(key:_formKey,
+    child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Column(
@@ -47,9 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.topLeft,
               child: Text(
                 '로그인',
-                style: theme.textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w900),
+                style: theme.textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w900),
             )),
-            SizedBox(height: 10,),
+            SizedBox(height: 30,),
             Align(
               alignment: Alignment.topLeft,
               child: RichText(
@@ -57,32 +65,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextSpan(
                       text: '아직 계정이 없으신가요?\n',
-                      style: theme.textTheme.bodyMedium,
+                      style: theme.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.w500),
                     ),
                     TextSpan(
                       text: '회원가입',
                       recognizer: TapGestureRecognizer()..onTap = widget.onSwitchToSignUp,
-                      style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.secondary),
+                      style: theme.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.w500, color: theme.colorScheme.primary),
                     )
                   ]
                 ),
                 ),
             ),
-            SizedBox(height: 40),
-            Text(
-              'Email',
-              style: styleForLabel
+            divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Email',
+                style: styleForLabel
+              ),
             ),
             SizedBox(height: 6),
             TextFormField(
               controller: widget.emailController,
               obscureText: false,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor,),
+                focusedBorder: focusedBorder,
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Icon(Icons.email_outlined),
+                ),
+                prefixIconColor: theme.colorScheme.primary,
                 hintText: 'example@ajou.ac.kr',
                 hintStyle: styleForHint,
                 isDense: true,
-                border: OutlineInputBorder(),
+                border: notFocusedBorder,
               ),
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
@@ -96,26 +112,38 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
-            SizedBox(height: 24),
-            Text(
-              'Password',
-              style: styleForLabel,
+            divider,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Password',
+                style: styleForLabel,
+              ),
             ),
             SizedBox(height: 6),            
             TextFormField(
               controller: widget.passwordController,
               obscureText: _obscurePassword,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock_outlined, color: theme.primaryColor,),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Icon(Icons.lock_outlined),
+                ),
+                prefixIconColor: theme.colorScheme.primary,
+                focusedBorder: focusedBorder,
                 isDense: true,
-                border: OutlineInputBorder(),
-                suffix: IconButton(
+                border: notFocusedBorder,
+                suffixIcon: IconButton(
                   onPressed: (){
                     setState(() {
                       _obscurePassword = !_obscurePassword;
                     });
                   }, 
-                  icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined)),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Icon(_obscurePassword ? Icons.visibility_rounded : Icons.visibility_off_rounded, color: theme.hintColor),
+                  )
+                ),
                 ),
                 validator: (value) {
                   if (value == null) {
@@ -125,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
-            SizedBox(height: 32),
+            divider,
             ElevatedButton(
               onPressed: () {
                 //테스트용 코드. 삭제할 것.

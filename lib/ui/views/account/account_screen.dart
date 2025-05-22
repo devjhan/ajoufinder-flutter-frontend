@@ -1,4 +1,3 @@
-import 'package:ajoufinder/domain/entities/user.dart';
 import 'package:ajoufinder/ui/viewmodels/auth_view_model.dart';
 import 'package:ajoufinder/ui/views/account/my_boards_screen.dart';
 import 'package:ajoufinder/ui/views/account/my_bookmarked_boards_screen.dart';
@@ -18,36 +17,25 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
-    final currentUser = authViewModel.currentUser!;
-    final theme = Theme.of(context);
     
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-          '나의 정보',
-          style: theme.textTheme.titleLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: theme.colorScheme.surfaceContainer, 
-        elevation: 0,
-      ),
-      body: ListView(
+    return ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          _buildMyInfoSection(currentUser, context),
-          const SizedBox(height: 20),
-          _buildAccountSection(currentUser, context),
-          const SizedBox(height: 20),
-          _buildCommunitySection(currentUser, context),
-        ],
-      ),
-    );
+          _buildMyInfoSection(),
+          const SizedBox(height: 28),
+          _buildAccountSection(),
+          const SizedBox(height: 28),
+          _buildCommunitySection(),
+          const SizedBox(height: 28),
+          _buildLogoutButton(),
+        ]
+      );
   }
 
- Widget _buildMyInfoSection(User currentUser, BuildContext context) {
+ Widget _buildMyInfoSection() {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final currentUser = authViewModel.currentUser!;
+
     String formattedJoinDate = DateFormat('yyyy-MM-dd').format(currentUser.joinDate);
     final theme = Theme.of(context);
 
@@ -58,12 +46,13 @@ class _AccountScreenState extends State<AccountScreen> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            spreadRadius: 1,
+            color: theme.colorScheme.shadow,
+            spreadRadius: 3,
             blurRadius: 5,
             offset: Offset(0, 3)
           )
         ],
+        border: Border.all(color: theme.hintColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,25 +67,6 @@ class _AccountScreenState extends State<AccountScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<AuthViewModel>(context, listen: false).logout();
-                },
-                style: theme.elevatedButtonTheme.style!.copyWith(
-                  backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                    (states) {
-                      if (states.contains(WidgetState.pressed)) {
-                        return const Color.fromARGB(255, 193, 1, 1);
-                      } else if (states.contains(WidgetState.disabled)) {
-                        return Colors.grey;
-                      } else {
-                      return const Color.fromARGB(255, 255, 1, 1);
-                    }
-                  },
-                ),
-                ),
-                child: Text('로그아웃', style: TextStyle(color: Colors.white)),
-              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -110,7 +80,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
+            color: theme.colorScheme.shadow,
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(0, 3)
@@ -171,8 +141,9 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  // "계정" 섹션 위젯
-  Widget _buildAccountSection(User currentUser, BuildContext context) {
+  Widget _buildAccountSection() {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final currentUser = authViewModel.currentUser!;
     final theme = Theme.of(context);
 
     return Container(
@@ -182,12 +153,13 @@ class _AccountScreenState extends State<AccountScreen> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            spreadRadius: 1,
+            color: theme.colorScheme.shadow,
+            spreadRadius: 3,
             blurRadius: 5,
             offset: Offset(0, 3)
           )
         ],
+        border: Border.all(color: theme.hintColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,8 +198,9 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  // "커뮤니티" 섹션 위젯
-  Widget _buildCommunitySection(User currentUser, BuildContext context) {
+  Widget _buildCommunitySection() {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final currentUser = authViewModel.currentUser!;
     final theme = Theme.of(context);
 
     return Container(
@@ -237,12 +210,13 @@ class _AccountScreenState extends State<AccountScreen> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            spreadRadius: 1,
+            color: theme.colorScheme.shadow,
+            spreadRadius: 3,
             blurRadius: 5,
             offset: Offset(0, 3)
           )
         ],
+        border: Border.all(color: theme.hintColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +288,6 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  // 재사용 가능한 리스트 아이템 위젯
   Widget _buildClickableListItem({
     required String title,
     String? trailingText,
@@ -357,6 +330,16 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    final theme = Theme.of(context);
+
+    return ElevatedButton(
+      onPressed: () => Provider.of<AuthViewModel>(context, listen: false).logout(), 
+      style: theme.elevatedButtonTheme.style!.copyWith(backgroundColor: WidgetStateProperty.all(theme.colorScheme.error)),
+      child: Text('로그아웃', style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onError)),
     );
   }
 }
