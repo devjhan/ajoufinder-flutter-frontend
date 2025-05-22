@@ -74,13 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: _isSearchBarWidgetActivated
         ? ([
           IconButton(
-            icon: Icon(Icons.close, color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onSurface),
+            icon: Icon(Icons.close, color: theme.colorScheme.primary),
             onPressed: _toggleSearchBarWidgetActivated,
             ),
           ])
         : [
           IconButton(
-            icon: Icon(Icons.filter_list, color: theme.colorScheme.onSurface,),
+            icon: Icon(Icons.filter_list, color: theme.colorScheme.primary,),
             onPressed: () async {
               showDialog(
                 context: context, 
@@ -90,12 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   onApply: (a, b, c) {},
                   onCancel: () {},
                 ),
-                );
+              );
             },
             tooltip: '필터',
           ),
           IconButton(
-            icon: Icon(Icons.notifications_none, color: theme.colorScheme.onSurface),
+            icon: Icon(Icons.notifications_none, color: theme.colorScheme.primary),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -134,29 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: SizedBox(
-        height: 35,
-        width: 180,
-        child: FloatingActionButton.extended(
-          onPressed: (){},
-          elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-          icon: Icon(Icons.add_circle_outline_outlined, size: 24, color: theme.colorScheme.onSurface,),
-          label: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: Text(
-              widget.lostCategory == 'lost' ? '잃어버렸어요' : '주웠어요',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                letterSpacing: -0.5,
-              ),
-            ),
-          ),
-          backgroundColor: theme.colorScheme.secondary,
-          foregroundColor: theme.colorScheme.onSecondary,
-          tooltip: '게시글 추가',
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: (){},
+        icon: Icon(Icons.post_add_outlined, size: 24),
+        label: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Text(widget.lostCategory == 'lost' ? '잃어버렸어요' : '주웠어요',),
         ),
+        tooltip: '글쓰기',
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
     );

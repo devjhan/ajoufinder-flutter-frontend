@@ -9,7 +9,7 @@ class CommentListWidget extends StatelessWidget{
   final List<Comment> comments;
   final User currentUser;
 
-  CommentListWidget({Key? key, required this.comments, required this.currentUser}) : super(key : key);
+  const CommentListWidget({super.key, required this.comments, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +35,10 @@ class _CommentCard extends StatefulWidget {
   final ThemeData theme;
 
   const _CommentCard({
-    Key? key, 
     required this.comment, 
     required this.currentUser,
     required this.theme
-  }) : super(key: key);
+  });
 
   @override
   State<_CommentCard> createState() => _CommentCardState();
@@ -106,7 +105,6 @@ class _CommentCardState extends State<_CommentCard> {
   
   Widget _buildCommentContent({required ThemeData theme}) {
     String formattedCreatedDate = DateFormat('MM.dd HH:mm').format(widget.comment.createdAt);
-    String formattedUpdatedDate = DateFormat('MM.dd HH:mm').format(widget.comment.updatedAt);   
 
     final String displayContent;
 

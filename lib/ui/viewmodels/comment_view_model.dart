@@ -52,4 +52,7 @@ class CommentViewModel extends ChangeNotifier{
     }
   }
 
+  Future<void> postComments({required String comment}) {
+    throw UnimplementedError();
+  }
 }

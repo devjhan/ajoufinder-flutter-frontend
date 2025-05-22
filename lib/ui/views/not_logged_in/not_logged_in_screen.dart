@@ -3,6 +3,8 @@ import 'package:ajoufinder/ui/views/not_logged_in/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 class NotLoggedInScreen extends StatefulWidget {
+  const NotLoggedInScreen({super.key});
+
   @override
   _NotLoggedInScreenState createState() => _NotLoggedInScreenState();
 }

@@ -14,7 +14,7 @@ class SignUpScreen extends StatefulWidget {
   final TextEditingController descriptionController;
   final TextEditingController phoneNumberController;
 
-  SignUpScreen({
+  const SignUpScreen({super.key, 
     required this.onSwitchToLogin,
     required this.emailController,
     required this.passwordController,
@@ -37,6 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+
       final (isSuccess, message) = await authViewModel.signUp(
         email: widget.emailController.text,
         password: widget.passwordController.text,
@@ -65,6 +66,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {   
     final theme = Theme.of(context);
+    final styleForHint = theme.textTheme.bodyLarge;
+    final styleForLabel = theme.textTheme.labelLarge;
 
     return Form(
       key: _formKey,
@@ -78,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   '회원가입',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
+                  style: theme.textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w900),
                 )
               ),
               SizedBox(height: 10,),
@@ -88,12 +91,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '아직 계정이 없으신가요?\n'
+                      text: '아직 계정이 없으신가요?\n',
+                      style: theme.textTheme.bodyMedium,
                     ),
                     TextSpan(
                       text: '회원가입',
                       recognizer: TapGestureRecognizer()..onTap = widget.onSwitchToLogin,
-                      style: TextStyle(color: theme.primaryColor)
+                      style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.secondary),
                     )
                   ]
                 ),
@@ -101,21 +105,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             SizedBox(height: 40,),
             Text(
-              'email',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Email',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),                        
                 TextFormField(
                   controller: widget.emailController,
                   obscureText: false,
                   decoration: InputDecoration(
-                    //labelText: '이메일',
-                    prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor,),
+                    prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor),
                     hintText: 'example@ajou.ac.kr',
-                    hintStyle: TextStyle(fontWeight: FontWeight.w300, color: theme.hintColor),
+                    hintStyle: styleForHint,
                     border: OutlineInputBorder(),
                     ),
                   keyboardType: TextInputType.emailAddress,
@@ -132,11 +132,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 24),
                   Text(
-                    'name',
-                    style: TextStyle(
-                      color: theme.hintColor,
-                      fontSize: 14,
-                    ),
+                    'Name',
+                    style: styleForLabel,
                   ),
             SizedBox(height: 6),            
                   TextFormField(
@@ -146,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       //labelText: '이름',
                       prefixIcon: Icon(Icons.account_box_outlined, color: theme.primaryColor,),
                       hintText: '홍길동',
-                      hintStyle: TextStyle(fontWeight: FontWeight.w300, color: theme.hintColor),
+                      hintStyle: styleForHint,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.name,
@@ -160,11 +157,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 24,),
             Text(
-              'nickname',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Nickname',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
                     TextFormField(
@@ -186,11 +180,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(height: 24),
             Text(
-              'password',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Password',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
                       TextFormField(
@@ -218,18 +209,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           SizedBox(height: 24),
             Text(
-              'confirm password',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Confirm Password',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.confirmPasswordController,
                             obscureText: _obscureConfirmPassword,
                             decoration: InputDecoration(
-                              //labelText: '비밀번호 확인',
                               prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor,),
                               border: OutlineInputBorder(),
                               suffix: IconButton(
@@ -250,20 +237,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                           SizedBox(height: 24,),
             Text(
-              'phone number',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Phone Number',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.phoneNumberController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              //labelText: '전화번호(선택)',
                               prefixIcon: Icon(Icons.local_phone_outlined, color: theme.primaryColor,),
-                              hintStyle: TextStyle(fontWeight: FontWeight.w300, color: theme.hintColor),
+                              hintStyle: styleForHint,
                               hintText: '공란, 또는 01012345678',
                               border: OutlineInputBorder(),
                             ),
@@ -278,18 +261,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                           SizedBox(height: 24),
             Text(
-              'description',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Description',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
                           TextFormField(
                             controller: widget.descriptionController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              //labelText: '자기소개(선택)',
                               prefixIcon: Icon(Icons.text_fields_outlined, color: theme.primaryColor,),
                               border: OutlineInputBorder(),
                             ),
@@ -304,9 +283,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               FocusScope.of(context).unfocus();
                               //_submitForm();
                             },
-                            child: Text('회원가입'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
+                            style: theme.elevatedButtonTheme.style!.copyWith(
+                              minimumSize: WidgetStateProperty.all(Size(double.infinity, 50)),
+                            ),
+                            child: Text(
+                              '회원가입', 
+                              style: theme.textTheme.bodyLarge!.copyWith(
+                                color: theme.colorScheme.onPrimary,
+                              ),
                             ),
                           ),
                         ],

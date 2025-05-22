@@ -1,12 +1,12 @@
-class Notification {
+class Alarm {
   final int id;
   final int userId;
   final String content;
   final String relatedUrl;
-  final bool isRead;
+  bool isRead;
   final DateTime createdAt;
 
-  Notification({
+  Alarm({
     required this.id,
     required this.userId,
     required this.content,
@@ -15,8 +15,8 @@ class Notification {
     required this.createdAt,
   });
 
-  factory Notification.fromJson(Map<String, dynamic> json) {
-    return Notification(
+  factory Alarm.fromJson(Map<String, dynamic> json) {
+    return Alarm(
       id: json['id'],
       userId: json['user_id'],
       content: json['content'],

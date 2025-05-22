@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -23,10 +23,15 @@ class _AccountScreenState extends State<AccountScreen> {
     final theme = Theme.of(context);
     
     return Scaffold(
-      backgroundColor: theme.canvasColor,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: Text(''),
-        backgroundColor: theme.scaffoldBackgroundColor, 
+        title: Text(
+          '나의 정보',
+          style: theme.textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: theme.colorScheme.surfaceContainer, 
         elevation: 0,
       ),
       body: ListView(
@@ -49,8 +54,16 @@ class _AccountScreenState extends State<AccountScreen> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3)
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,18 +75,27 @@ class _AccountScreenState extends State<AccountScreen> {
                 '내 정보',
                 style: theme.textTheme.titleLarge?.copyWith(
                   color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
                   Provider.of<AuthViewModel>(context, listen: false).logout();
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.error,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  textStyle: theme.textTheme.labelLarge
+                style: theme.elevatedButtonTheme.style!.copyWith(
+                  backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                    (states) {
+                      if (states.contains(WidgetState.pressed)) {
+                        return const Color.fromARGB(255, 193, 1, 1);
+                      } else if (states.contains(WidgetState.disabled)) {
+                        return Colors.grey;
+                      } else {
+                      return const Color.fromARGB(255, 255, 1, 1);
+                    }
+                  },
                 ),
-                child: Text('로그아웃', style: TextStyle(color: theme.colorScheme.onError)),
+                ),
+                child: Text('로그아웃', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -86,6 +108,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 decoration: BoxDecoration(
                   color: theme.colorScheme.onSurfaceVariant,
                   shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3)
+          )
+        ],
                   image: currentUser.profileImage != null && currentUser.profileImage!.isNotEmpty
                       ? DecorationImage(
                           image: NetworkImage(currentUser.profileImage!), // 실제 프로필 이미지 설정
@@ -104,7 +134,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      currentUser.nickname, // 이름 / 닉네임
+                      currentUser.nickname,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold
@@ -119,16 +149,16 @@ class _AccountScreenState extends State<AccountScreen> {
                           ? '${currentUser.email}\n${currentUser.phoneNumber}'
                           : currentUser.email, // 이메일 / 전화번호
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: theme.colorScheme.onSurface,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '가입일: $formattedJoinDate', // 가입일
+                      '가입일 : $formattedJoinDate', // 가입일
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -148,8 +178,16 @@ class _AccountScreenState extends State<AccountScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3)
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,8 +197,9 @@ class _AccountScreenState extends State<AccountScreen> {
             child: Text(
               '계정',
               style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-              ),
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
             ),
           ),
           _buildClickableListItem(
@@ -172,6 +211,13 @@ class _AccountScreenState extends State<AccountScreen> {
             title: '비밀번호 변경',
             onTap: () {
               // TODO: 비밀번호 변경 기능 구현
+            },
+            context: context
+          ),
+          _buildClickableListItem(
+            title: '관심 물품 설정',
+            onTap: () {
+              
             },
             context: context
           ),
@@ -187,8 +233,16 @@ class _AccountScreenState extends State<AccountScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3)
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,6 +253,7 @@ class _AccountScreenState extends State<AccountScreen> {
               '커뮤니티',
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -283,7 +338,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(
                     title,
                     style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.normal,
                   ),
                   ),
                   if (trailingText != null)

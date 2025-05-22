@@ -5,6 +5,8 @@ import 'package:ajoufinder/ui/views/map/map_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoggedInScreen extends StatefulWidget {
+  const LoggedInScreen({super.key});
+
   @override
   _LoggedInScreenState createState() => _LoggedInScreenState();
 }

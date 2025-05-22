@@ -17,12 +17,13 @@ class _MyBoardsScreenState extends State<MyBoardsScreen> {
   void initState() {
     super.initState();
 
-    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    final boardViewModel = Provider.of<BoardViewModel>(context, listen: false);
-    
-    if (authViewModel.userUid != null) {
-      boardViewModel.fetchBoards(uuid: authViewModel.userUid);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      final boardViewModel = Provider.of<BoardViewModel>(context, listen: false);
+      if (authViewModel.userUid != null) {
+        boardViewModel.fetchBoards(uuid: authViewModel.userUid);
+      }
+    });
   }
 
   @override
@@ -46,17 +47,21 @@ class _MyBoardsScreenState extends State<MyBoardsScreen> {
           ),          
         ),
       ),
-      body: boardViewModel.isLoading 
-      ? Center(child: CircularProgressIndicator())
+      body: _buildBodyContent(boardViewModel: boardViewModel),
+    );
+  }
+
+  Widget _buildBodyContent({required BoardViewModel boardViewModel,}) {
+    return boardViewModel.isLoading 
+    ? Center(child: CircularProgressIndicator())
+    : (
+      boardViewModel.error != null
+      ? Center(child: Text(boardViewModel.error!))
       : (
-        boardViewModel.error != null
-        ? Center(child: Text(boardViewModel.error!))
-        : (
-          boardViewModel.boards.isEmpty 
-          ? Center(child: Text('작성한 게시글이 없습니다.'))
-          : BoardListWidget(boards: boardViewModel.boards)
-        )
-      ),
+        boardViewModel.boards.isEmpty 
+        ? Center(child: Text('작성한 게시글이 없습니다.'))
+        : BoardListWidget(boards: boardViewModel.boards)
+      )
     );
   }
 }

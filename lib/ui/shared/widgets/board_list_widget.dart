@@ -1,9 +1,13 @@
 import 'package:ajoufinder/domain/entities/board.dart';
+import 'package:ajoufinder/ui/shared/widgets/board_view_widget.dart';
+import 'package:ajoufinder/ui/viewmodels/auth_view_model.dart';
+import 'package:ajoufinder/ui/viewmodels/comment_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BoardListWidget extends StatelessWidget {
   final List<Board> boards;
-  BoardListWidget({Key? key, required this.boards}) : super(key : key);
+  const BoardListWidget({super.key, required this.boards});
   
   @override
   Widget build(BuildContext context) {
@@ -28,25 +32,42 @@ class _BoardCard extends StatelessWidget {
   final ThemeData theme;
 
   const _BoardCard({
-    Key? key, 
+    super.key,
     required this.board, 
-    required this.theme
-  }) : super(key: key);
+    required this.theme,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Color cardBg = theme.colorScheme.surface; // 밝은 회색 계열
     final Color borderColor = theme.dividerColor.withValues(alpha: 0.7);
 
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final commentViewModel = Provider.of<CommentViewModel>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: GestureDetector(
         onTap: () {
-          // TODO: 게시글 클릭 시 동작
-          print('게시글 클릭됨: ${board.title}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: BoardViewWidget(
+                      board: board,
+                      currentUser: authViewModel.currentUser!,
+                      comments: commentViewModel.comments,
+                      onCommentSubmitted: (commentText) {
+                        commentViewModel.postComments(comment: commentText);
+                      },
+                      ),
+                  ),
+                )),
+              );
         },
         child: Card(
-          elevation: 1, // 낮은 elevation
+          elevation: 1, 
           shadowColor: Colors.black.withValues(alpha: 0.06), // 연한 그림자
           surfaceTintColor: Colors.transparent,
           color: cardBg,

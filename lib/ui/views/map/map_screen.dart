@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget{
 
-  const MapScreen({Key? key}) : super(key: key);
+  const MapScreen({super.key});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -36,8 +36,6 @@ class _MapScreenState extends State<MapScreen> {
 
       @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context); // CustomSearchBar 내부에서 테마 사용
-
     return Scaffold(
       body: Stack(
         children: [
@@ -63,10 +61,7 @@ class _MapScreenState extends State<MapScreen> {
               hintText: '장소, 주소 검색',
               onSubmitted: _performMapSearch,
               focusNode: _searchFocusNode,
-              onClear: () {
-                // 검색어 클리어 시 추가 동작 (예: 검색 결과 초기화)
-                print('MapScreen 검색어 클리어됨');
-              },
+              onClear: () {},
             ),
           ),
         ],
@@ -77,30 +72,31 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _createMarkers() {
     return {
       Marker(
-        markerId: MarkerId('marker_1'),
-        position: LatLng(37.5665, 126.9780), // 서울 중심 좌표
-        infoWindow: InfoWindow(title: '마커 1', snippet: '마커 1 설명'),
+        markerId: MarkerId('팔달관'),
+        position: LatLng(37.28448, 127.0444),
+        consumeTapEvents: true,
         onTap: () {
-          // TODO: 마커 1 클릭 시 동작 구현
-          print('마커 1 클릭됨!');
         },
       ),
       Marker(
-        markerId: MarkerId('marker_2'),
-        position: LatLng(37.55, 126.98), // 임의 좌표
-        infoWindow: InfoWindow(title: '마커 2', snippet: '마커 2 설명'),
+        markerId: MarkerId('원천관'),
+        position: LatLng(37.28293, 127.0434), // 임의 좌표
+        consumeTapEvents: true,
         onTap: () {
-          // TODO: 마커 2 클릭 시 동작 구현
-          print('마커 2 클릭됨!');
         },
       ),
       Marker(
-        markerId: MarkerId('marker_3'),
-        position: LatLng(37.57, 126.96), // 임의 좌표
-        infoWindow: InfoWindow(title: '마커 3', snippet: '마커 3 설명'),
+        markerId: MarkerId('토목실험동'),
+        position: LatLng(37.28427, 127.0434), // 임의 좌표
+        consumeTapEvents: true,
         onTap: () {
-          // TODO: 마커 3 클릭 시 동작 구현
-          print('마커 3 클릭됨!');
+        },
+      ),
+      Marker(
+        markerId: MarkerId('북문'),
+        position: LatLng(37.28543, 127.0441), // 임의 좌표
+        consumeTapEvents: true,
+        onTap: () {
         },
       ),
     };

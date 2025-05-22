@@ -1,8 +1,10 @@
 import 'package:ajoufinder/injection_container.dart';
 import 'package:ajoufinder/ui/navigations/auth_gate.dart';
+import 'package:ajoufinder/ui/viewmodels/alarm_view_model.dart';
 import 'package:ajoufinder/ui/viewmodels/auth_view_model.dart';
 import 'package:ajoufinder/ui/viewmodels/board_view_model.dart';
 import 'package:ajoufinder/ui/viewmodels/comment_view_model.dart';
+import 'package:ajoufinder/ui/viewmodels/condition_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthViewModel()),  
         ChangeNotifierProvider(create: (_) => BoardViewModel()),  
         ChangeNotifierProvider(create: (_) => CommentViewModel()),  
+        ChangeNotifierProvider(create: (_) => AlarmViewModel()),
+        ChangeNotifierProvider(create: (_) => ConditionViewModel()),    
       ],
       child: MyApp(),
     )
@@ -23,97 +27,80 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    const lightColorScheme = ColorScheme(
-      brightness: Brightness.light,
-
-      primary: Colors.deepPurple,
-      onPrimary: Colors.white,
-
-      secondary: Colors.lime,
-      onSecondary: Colors.black,
-
-      error: Color(0xFFB00020),
-      onError: Colors.white,
-
-      surface: Color(0xFFFFFFFF),
-      onSurface: Colors.black,
-
-      primaryContainer: Colors.lightBlueAccent,
-      onPrimaryContainer: Colors.black,    
-
-      secondaryContainer: Colors.limeAccent,
-      onSecondaryContainer: Colors.black,   
-
-      tertiary: Color(0xFF03DAC5),        
-      onTertiary: Colors.black,
-
-      tertiaryContainer: Color(0xFFCEFFFF),
-      onTertiaryContainer: Colors.black,
-
-      errorContainer: Color(0xFFFCD8DF),
-      onErrorContainer: Colors.black,
-
-      onSurfaceVariant: Colors.black,
-
-      outline: Color(0xFFBDBDBD),
-      outlineVariant: Color(0xFFE0E0E0),
-
-      shadow: Colors.black,
-      scrim: Colors.black,
-
-      inverseSurface: Color(0xFF303030),
-      onInverseSurface: Colors.white,
-      inversePrimary: Colors.indigoAccent,
+    
+    final scheme = ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 43, 1, 255),
+      primary: const Color.fromARGB(255, 43, 1, 255),
+      onPrimary: const Color.fromARGB(212, 255, 255, 255),
+      contrastLevel: 0.5,
+      surface: Colors.white,
+      surfaceContainer: Colors.white,  
+    );
+    
+    final elevatedButtonTheme = ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+          (states) {
+            if (states.contains(WidgetState.pressed)) {
+              return const Color.fromARGB(255, 35, 0, 212);
+              } else if (states.contains(WidgetState.disabled)) {
+              return Colors.grey;
+              } else {
+              return const Color.fromARGB(255, 43, 1, 255);
+              }
+            },
+          ),
+          elevation: WidgetStateProperty.resolveWith<double>(
+            (states) {
+              if (states.contains(WidgetState.pressed)) {
+                return 12.0;
+                } else if (states.contains(WidgetState.disabled)) {
+                return 0.0;
+                }
+                return 6.0;
+              }
+            ), 
+          shadowColor: WidgetStateProperty.all(Colors.black.withValues(alpha: 0.7)),
+        ),
+      );
+    
+    final floatingActionButonTheme = FloatingActionButtonThemeData(
+      backgroundColor: scheme.primary,
+      foregroundColor: scheme.onPrimary,
+      elevation: 6.0,
+      hoverColor: scheme.primary,
+      shape: const StadiumBorder(side: BorderSide(style: BorderStyle.none,)),
+      extendedSizeConstraints: const BoxConstraints(
+        minHeight: 40,
+        minWidth: 320,
+      ),
+      extendedIconLabelSpacing: 12.0, 
     );
 
-   final ThemeData lightTheme = ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: lightColorScheme,
+    final ThemeData lightTheme = ThemeData.light().copyWith(
+      colorScheme: scheme,
+      elevatedButtonTheme: elevatedButtonTheme,
+      floatingActionButtonTheme: floatingActionButonTheme,
+    );
 
-      scaffoldBackgroundColor: Colors.white38,
-      hintColor: Colors.grey[600],
-
-      appBarTheme: AppBarTheme(
-        backgroundColor: lightColorScheme.primary,
-        foregroundColor: lightColorScheme.onPrimary,
-        elevation: 4.0,
-        titleTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: lightColorScheme.onPrimary,
-        ),
-      ),
-
-      cardTheme: CardTheme(
-        color: lightColorScheme.surface,
-        elevation: 1.0,
-        margin: EdgeInsets.all(8.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-      ),
-
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: lightColorScheme.primary,
-          foregroundColor: lightColorScheme.onPrimary,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: lightColorScheme.primary,
-        )
-      ),
+    final ThemeData darkTheme = ThemeData.dark().copyWith(
+      colorScheme: scheme,
+      elevatedButtonTheme: elevatedButtonTheme,
+      floatingActionButtonTheme: floatingActionButonTheme,
+      brightness: Brightness.dark,
     );
 
     return MaterialApp(
       title: 'AjouFinder',
       home: AuthGate(),
-      theme: lightTheme
-    );
+      theme: lightTheme,
+      //darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
+      themeAnimationCurve: Curves.ease,  
+  );
   }
 }

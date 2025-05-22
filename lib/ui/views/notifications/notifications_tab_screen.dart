@@ -1,9 +1,9 @@
-import 'package:ajoufinder/ui/views/notifications/keyword_screen.dart';
-import 'package:ajoufinder/ui/views/notifications/notifications_screen.dart';
+import 'package:ajoufinder/ui/views/notifications/condition_screen.dart';
+import 'package:ajoufinder/ui/views/notifications/alarm_screen.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsTabScreen extends StatelessWidget {
-  const NotificationsTabScreen({Key? key}) : super(key: key);
+  const NotificationsTabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class NotificationsTabScreen extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            NotificationScreen(),
-            KeywordScreen(),
+            AlarmScreen(),
+            ConditionScreen(),
           ],
         ),
       ),

@@ -8,7 +8,7 @@ class LoginScreen extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
-  LoginScreen({
+  const LoginScreen({super.key, 
     required this.onSwitchToSignUp,
     required this.emailController,
     required this.passwordController,
@@ -32,6 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final styleForHint = theme.textTheme.bodyLarge;
+    final styleForLabel = theme.textTheme.labelLarge;
+
     return 
     Form(key:_formKey,
       child: SingleChildScrollView(
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.topLeft,
               child: Text(
                 '로그인',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
+                style: theme.textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w900),
             )),
             SizedBox(height: 10,),
             Align(
@@ -53,12 +56,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '아직 계정이 없으신가요?\n'
+                      text: '아직 계정이 없으신가요?\n',
+                      style: theme.textTheme.bodyMedium,
                     ),
                     TextSpan(
                       text: '회원가입',
                       recognizer: TapGestureRecognizer()..onTap = widget.onSwitchToSignUp,
-                      style: TextStyle(color: theme.primaryColor)
+                      style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.secondary),
                     )
                   ]
                 ),
@@ -66,21 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 40),
             Text(
-              'email',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Email',
+              style: styleForLabel
             ),
             SizedBox(height: 6),
             TextFormField(
               controller: widget.emailController,
               obscureText: false,
               decoration: InputDecoration(
-                //labelText: '이메일',
                 prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor,),
                 hintText: 'example@ajou.ac.kr',
-                hintStyle: TextStyle(fontWeight: FontWeight.w300, color: theme.hintColor),
+                hintStyle: styleForHint,
                 isDense: true,
                 border: OutlineInputBorder(),
               ),
@@ -98,18 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 24),
             Text(
-              'password',
-              style: TextStyle(
-                color: theme.hintColor,
-                fontSize: 14,
-              ),
+              'Password',
+              style: styleForLabel,
             ),
             SizedBox(height: 6),            
             TextFormField(
               controller: widget.passwordController,
               obscureText: _obscurePassword,
               decoration: InputDecoration(
-                //labelText: '비밀번호',
                 prefixIcon: Icon(Icons.lock_outlined, color: theme.primaryColor,),
                 isDense: true,
                 border: OutlineInputBorder(),
@@ -137,9 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 FocusScope.of(context).unfocus();
                 //_submitForm();
               },
-              child: Text('로그인'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50), // 버튼 너비 최대로
+              style: theme.elevatedButtonTheme.style!.copyWith(
+                minimumSize: WidgetStateProperty.all(Size(double.infinity, 50)),
+              ),
+              child: Text(
+                '로그인',
+                style: theme.textTheme.bodyLarge!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
               ),
             ),
           ],

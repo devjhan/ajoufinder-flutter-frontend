@@ -8,13 +8,13 @@ class SearchBarWidget extends StatefulWidget {
   final FocusNode? focusNode;
 
   const SearchBarWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     required this.onSubmitted,
     this.onClear,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();

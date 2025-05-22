@@ -20,17 +20,5 @@ class GoogleMapService {
     // TODO: 검색어를 좌표로 변환하는 기능 추가 (Geocoding API 호출 등)
     // 검색 기능 구현
   }
-
-  void addMarker(Marker marker) {
-    // TODO: 마커 추가 기능 구현
-  }
-
-  void removeMarker(MarkerId markerId) {
-    // TODO: 마커 삭제 기능 구현
-  }
-
-  void clearMarkers() {
-    // TODO: 모든 마커 삭제 기능 구현
-  }
 }
 

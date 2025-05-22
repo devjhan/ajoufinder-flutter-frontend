@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MyCommentsScreen extends StatefulWidget{
-  const MyCommentsScreen({Key? key}) : super(key : key);
+  const MyCommentsScreen({super.key});
 
   @override
   State<MyCommentsScreen> createState() => _MyCommentsScreenState();
@@ -17,12 +17,14 @@ class _MyCommentsScreenState extends State<MyCommentsScreen> {
   void initState() {
     super.initState();
 
-    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    final commentViewModel = Provider.of<CommentViewModel>(context, listen: false);
-
-    if (authViewModel.userUid != null) {
-      commentViewModel.fetchCommentsByUserId(uuid: authViewModel.userUid!);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      final commentViewModel = Provider.of<CommentViewModel>(context, listen: false);
+      
+      if (authViewModel.userUid != null) {
+        commentViewModel.fetchCommentsByUserId(uuid: authViewModel.userUid!);
+      }
+    });
   }
 
   @override
@@ -48,17 +50,21 @@ class _MyCommentsScreenState extends State<MyCommentsScreen> {
           ),          
         ),
       ),
-      body: commentViewModel.isLoading
-      ? Center(child: CircularProgressIndicator())
+      body: _buildBodyContent(commentViewModel: commentViewModel, authViewModel: authViewModel),
+    );
+  }
+
+  Widget _buildBodyContent({required CommentViewModel commentViewModel, required AuthViewModel authViewModel}) {
+    return commentViewModel.isLoading
+    ? Center(child: CircularProgressIndicator())
+    : (
+      commentViewModel.error != null
+      ? Center(child: Text(commentViewModel.error!))
       : (
-        commentViewModel.error != null
-        ? Center(child: Text(commentViewModel.error!))
-        : (
-          commentViewModel.comments.isEmpty
-          ? Center(child: Text('작성한 댓글이 없습니다.'))
-          : CommentListWidget(comments: commentViewModel.comments, currentUser: authViewModel.currentUser!)
-        )
-      ),
+        commentViewModel.comments.isEmpty
+        ? Center(child: Text('작성한 댓글이 없습니다.'))
+        : CommentListWidget(comments: commentViewModel.comments, currentUser: authViewModel.currentUser!)
+      )
     );
   }
 }

@@ -5,18 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthGate extends StatelessWidget{
+  const AuthGate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
 
-    return Center(
-      child: ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 400),
-      child: authViewModel.isLoggedIn
-      ? LoggedInScreen()
-      : NotLoggedInScreen(),
-      ),
+    return Selector<AuthViewModel, bool>(
+      selector: (context, authViewModel) => authViewModel.isLoggedIn,
+      builder: (context, isLoggedIn, child) {
+
+        Widget screenToDisplay = isLoggedIn ? LoggedInScreen() : NotLoggedInScreen();
+
+        return Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400),
+            child: screenToDisplay,
+          ),
+        );
+      }
     );
   }
 }
